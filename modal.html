@@ -1,0 +1,53 @@
+<div id="modal-example" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Confirmá si sos mayor de 18 años</h2>
+        <p class="uk-margin-medium">Nuestros productos son de venta y consumo exclusivo para adultos.</p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Ingresar</button>
+            <button onclick="location.href='https://www.facebook.com'" class="uk-button uk-button-primary" type="button">Salir</button>
+        </p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.6.22/js/uikit-icons.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = UIkit.modal('#modal-example');
+        const lastShown = localStorage.getItem('modalLastShown');
+        const now = new Date().getTime();
+        const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        // Function to show the modal
+        function showModal() {
+            modal.show();
+        }
+
+        // Function to hide the modal and set the timestamp
+        function handleClose() {
+            if (modal.isActive()) {
+                localStorage.setItem('modalLastShown', now);
+            }
+        }
+
+        // If the modal has never been shown or it has been more than 24 hours
+        if (!lastShown || (now - lastShown > oneDay)) {
+            showModal();
+
+            // Event listener for modal close
+            modal.$el.addEventListener('hide', handleClose);
+
+            // Event listener for the "Ingresar" button
+            document.querySelector('.uk-button-default').addEventListener('click', function () {
+                localStorage.setItem('modalLastShown', now);
+                modal.hide();
+            });
+
+            // Event listener for the "Salir" button
+            document.querySelector('.uk-button-primary').addEventListener('click', function () {
+                location.href = 'https://www.facebook.com';
+            });
+        }
+    });
+</script>
